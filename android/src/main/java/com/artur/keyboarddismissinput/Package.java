@@ -11,24 +11,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class Package implements ReactPackage {
+    public Package(){
+    }
+
 
     @Override
-    public List<Class<? extends JavaScriptModule>> createJSModules() {
-        return Collections.emptyList();
+    public List<NativeModule> createNativeModules(ReactApplicationContext reactApplicationContext) {
+        return Collections.<NativeModule>singletonList(new Module(reactApplicationContext));
     }
 
     @Override
-    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<NativeModule> createNativeModules(
-            ReactApplicationContext reactContext) {
-        List<NativeModule> modules = new ArrayList<>();
-
-        modules.add(new Module(reactContext));
-
-        return modules;
+    public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
+        return Arrays.<ViewManager>asList();
     }
 }
