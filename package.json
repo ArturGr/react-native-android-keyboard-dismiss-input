@@ -1,7 +1,7 @@
 {
-  "name": "react-native-android-library-boilerplate",
+  "name": "react-native-android-keyboard-dismiss-input",
   "version": "0.0.1",
-  "author": "Christoph Michel http://cmichel.io",
+  "author": "Artur Gräfenstein",
   "private": false,
   "license": "Unlicense",
   "repository": {
