@@ -1,5 +1,19 @@
-'use strict'
 
-import { NativeModules } from 'react-native'
-// name as defined via ReactContextBaseJavaModule's getName
-export default NativeModules.KeyboardDismissInput
+
+'use strict';
+import { 
+  NativeModules, 
+  requireNativeComponent, 
+  View 
+} from 'react-native';
+
+var iface = {
+  name: 'KeyboardDismissEditText',
+  propTypes: {
+    ...View.propTypes // include the default view properties
+  },
+};
+
+var KeyboardDismissEditText = requireNativeComponent('KeyboardDismissEditText', iface);
+
+export default KeyboardDismissEditText;

@@ -31,7 +31,7 @@ public class Package implements ReactPackage {
     public List<ViewManager> createViewManagers(
             ReactApplicationContext reactContext) {
         return Collections.<ViewManager>singletonList(
-                new ProgressBarViewManager()
+                new EditTextViewManager()
         );
     }
 
