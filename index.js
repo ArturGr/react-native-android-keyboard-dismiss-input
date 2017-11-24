@@ -52,6 +52,23 @@ class MyEditTextComponent extends Component {
 			[],
 		);
 	}
+	
+	setText(text) {
+		if(!text || (text && text.length == 0)){
+			UIManager.dispatchViewManagerCommand(
+			findNodeHandle(this),
+			UIManager.MyEditText.Commands.setText,
+			undefined
+			);
+		}else{
+			UIManager.dispatchViewManagerCommand(
+			findNodeHandle(this),
+			UIManager.MyEditText.Commands.setText,
+			[text],
+			);
+		}
+		
+	}
 }
 
 MyEditTextComponent.propTypes = {  
