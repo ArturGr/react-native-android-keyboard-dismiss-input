@@ -138,29 +138,38 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
 
     @ReactProp(name = "text")
     public void text(MyEditText view, String text) {
-        if(text.length() == 0 && this.thisEditText.getText().toString().length() != 0){
-            thisEditText.getText().clear();
-        }else if(text.length() != 0 && !text.equals(thisEditText.getText().toString())){
-            Editable editable = new SpannableStringBuilder(text);
-            thisEditText.setText(editable, TextView.BufferType.EDITABLE);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    thisEditText.setSelection(thisEditText.getText().length());
-                    simulatedEdition = true;
-                    thisEditText.dispatchKeyEvent(new KeyEvent(1, 0, KeyEvent.ACTION_DOWN,
-                            KeyEvent.KEYCODE_SPACE, 0));
-                    thisEditText.dispatchKeyEvent(new KeyEvent(2, 0, KeyEvent.ACTION_UP,
-                            KeyEvent.KEYCODE_SPACE, 0));
-                    thisEditText.dispatchKeyEvent(new KeyEvent(1, 0, KeyEvent.ACTION_DOWN,
-                            KeyEvent.KEYCODE_DEL, 0));
-                    thisEditText.dispatchKeyEvent(new KeyEvent(2, 0, KeyEvent.ACTION_UP,
-                            KeyEvent.KEYCODE_DEL, 0));
-                }
-            }, 0);
-
+        if(text == null){
+            if(thisEditText.getText().toString().length() != 0) {
+                thisEditText.getText().clear();
+            }
+        }else{
+            if(text.length() == 0 && this.thisEditText.getText().toString().length() != 0){
+                thisEditText.getText().clear();
+            }else if(text.length() != 0 && !text.equals(thisEditText.getText().toString())){
+                setText(text);
+            }
         }
+    }
+
+    private void setText(String text){
+        Editable editable = new SpannableStringBuilder(text);
+        thisEditText.setText(editable, TextView.BufferType.EDITABLE);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                thisEditText.setSelection(thisEditText.getText().length());
+                simulatedEdition = true;
+                thisEditText.dispatchKeyEvent(new KeyEvent(1, 0, KeyEvent.ACTION_DOWN,
+                        KeyEvent.KEYCODE_SPACE, 0));
+                thisEditText.dispatchKeyEvent(new KeyEvent(2, 0, KeyEvent.ACTION_UP,
+                        KeyEvent.KEYCODE_SPACE, 0));
+                thisEditText.dispatchKeyEvent(new KeyEvent(1, 0, KeyEvent.ACTION_DOWN,
+                        KeyEvent.KEYCODE_DEL, 0));
+                thisEditText.dispatchKeyEvent(new KeyEvent(2, 0, KeyEvent.ACTION_UP,
+                        KeyEvent.KEYCODE_DEL, 0));
+            }
+        }, 0);
     }
 
 
@@ -168,6 +177,7 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
 
     public static final int COMMAND_REQUEST_FOCUS = 1;
     public static final int COMMAND_REQUEST_BLUR = 2;
+    public static final int COMMAND_SET_TEXT = 3;
 
 
     @Override
@@ -175,7 +185,8 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
         Log.d("React"," View manager getCommandsMap:");
         return MapBuilder.of(
                 "requestFocus", COMMAND_REQUEST_FOCUS,
-                "requestBlur", COMMAND_REQUEST_BLUR
+                "requestBlur", COMMAND_REQUEST_BLUR,
+                "setText", COMMAND_SET_TEXT
                 );
     }
 
@@ -184,8 +195,8 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
             MyEditText view,
             int commandType,
             @Nullable ReadableArray args) {
-        Assertions.assertNotNull(view);
-        Assertions.assertNotNull(args);
+       // Assertions.assertNotNull(view);
+        //Assertions.assertNotNull(args);
         switch (commandType) {
             case COMMAND_REQUEST_FOCUS: {
                 //view.saveImage();
@@ -205,6 +216,15 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 return;
             }
+            case COMMAND_SET_TEXT:{
+                if(args != null){
+                    setText(args.getString(0));
+                }else{
+                    thisEditText.getText().clear();
+                }
+                return;
+            }
+
 
 
 
