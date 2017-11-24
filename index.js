@@ -1,19 +1,20 @@
-
-
 'use strict';
 import { 
   NativeModules, 
   requireNativeComponent, 
   View 
 } from 'react-native';
+import { PropTypes } from 'react';
 
-var iface = {
-  name: 'KeyboardDismissEditText',
-  propTypes: {
-    ...View.propTypes // include the default view properties
-  },
-};
+var iface = {  
+    name: 'MyEditText',
+    PropTypes: {
+        customval: PropTypes.string,
+		blured: PropTypes.boolean,
+		text:PropTypes.string,
+        ...View.propTypes // include the default view properties
+    }
+}
 
-var KeyboardDismissEditText = requireNativeComponent('KeyboardDismissEditText', iface);
-
-export default KeyboardDismissEditText;
+var MyEditText = requireNativeComponent('MyEditText', iface);
+export default MyEditText;
