@@ -30,16 +30,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -106,6 +109,8 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
                     setSelectionToEnd = false;
                     thisEditText.setSelection(thisEditText.getText().length());
                 }
+                WritableMap event = Arguments.createMap();
+                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(thisEditText.getId(), "topChange", event);
             }
 
             public void beforeTextChanged(CharSequence cs, int s, int c, int a) {}
@@ -126,18 +131,8 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
     }
 
 
-    @ReactProp(name = "customval")
-    public void setDay(MyEditText view, String getet) {
-    }
 
-    @ReactProp(name = "blured")
-    public void blured(MyEditText view, boolean blur) {
-        if(blur){
-            thisEditText.clearFocus();
-            InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
+
 
     private boolean setSelectionToEnd = false;
 
@@ -148,9 +143,6 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
         }else if(text.length() != 0 && !text.equals(thisEditText.getText().toString())){
             Editable editable = new SpannableStringBuilder(text);
             thisEditText.setText(editable, TextView.BufferType.EDITABLE);
-            BaseInputConnection inputConnection = new BaseInputConnection(thisEditText, true);
-            inputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A));
-
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -173,34 +165,31 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
 
 
 
-    /*@ReactMethod
-    public void someMethod(final int viewId, final String str) {
-        withMyView(viewId, promise, new MyViewHandler() {
-            @Override
-            public void handle(MyView view) {
-                String value = view.someMethod();
-                promise.resolve(value)
-            }
-        });
-    }*/
 
+    public static final int COMMAND_REQUEST_FOCUS = 1;
+    public static final int COMMAND_REQUEST_BLUR = 2;
 
 
     @Override
-    public void receiveCommand( MyEditText view, int commandType, @Nullable ReadableArray args) {
-        //Assertions.assertNotNull(view);
-        //Assertions.assertNotNull(args);
-        switch (commandType) {
-            case COMMAND_BLUR: {
-                thisEditText.clearFocus();
-                InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                return;
-            }
-            case COMMAND_FOCUS:{
-                //Toast.makeText(context, "FOUCS GET", Toast.LENGTH_SHORT).show();
-                thisEditText.requestFocus();
+    public Map<String,Integer> getCommandsMap() {
+        Log.d("React"," View manager getCommandsMap:");
+        return MapBuilder.of(
+                "requestFocus", COMMAND_REQUEST_FOCUS,
+                "requestBlur", COMMAND_REQUEST_BLUR
+                );
+    }
 
+    @Override
+    public void receiveCommand(
+            MyEditText view,
+            int commandType,
+            @Nullable ReadableArray args) {
+        Assertions.assertNotNull(view);
+        Assertions.assertNotNull(args);
+        switch (commandType) {
+            case COMMAND_REQUEST_FOCUS: {
+                //view.saveImage();
+                thisEditText.requestFocus();
                 thisEditText.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -210,22 +199,34 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
                 },200);
                 return;
             }
-            default:
+            case COMMAND_REQUEST_BLUR:{
+                thisEditText.clearFocus();
+                InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                return;
+            }
 
+
+
+            default:
+                throw new IllegalArgumentException(String.format(
+                        "Unsupported command %d received by %s.",
+                        commandType,
+                        getClass().getSimpleName()));
         }
     }
 
 
-    public static final int COMMAND_BLUR = 1;
-    public static final int COMMAND_FOCUS = 2;
 
-    @Override
-    public Map<String,Integer> getCommandsMap() {
-        Log.d("React"," View manager getCommandsMap:");
-        return MapBuilder.of(
-                "blur",
-                COMMAND_BLUR, "focus", COMMAND_FOCUS);
+
+    public void onReceiveNativeEvent(final ThemedReactContext reactContext, final MyEditText materialCalendarView) {
+        Log.e("LOG", "Recieved Native Event!!");
+        WritableMap event = Arguments.createMap();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(materialCalendarView.getId(), "topChange", event);
     }
+
+
+
 
 
     public class MyEditText extends android.support.v7.widget.AppCompatEditText {
@@ -268,5 +269,7 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
             ((ReactContext)getContext())
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class) .emit(eventName, params);
         }
+
+
     }
 }
