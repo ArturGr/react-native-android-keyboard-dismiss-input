@@ -73,7 +73,7 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
         thisEditText.setSingleLine(false);
         thisEditText.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
 
-        thisEditText.setHintTextColor(ContextCompat.getColor(context, R.color.text));
+        thisEditText.setHintTextColor(Color.parseColor("#D8D8D8"));
         thisEditText.setTextColor(Color.BLACK);
         thisEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
