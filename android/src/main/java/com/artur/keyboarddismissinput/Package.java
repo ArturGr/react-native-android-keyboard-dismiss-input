@@ -12,28 +12,20 @@ import java.util.List;
 import java.util.Arrays;
 
 public class Package implements ReactPackage {
-    public Package(){
-        //test commit
-    }
+
+
 
 
     @Override
-    public List<NativeModule> createNativeModules(ReactApplicationContext reactApplicationContext) {
-        return Collections.<NativeModule>singletonList(new Module(reactApplicationContext));
+    public List<ViewManager> createViewManagers( ReactApplicationContext reactContext) {
+        return Collections.<ViewManager>singletonList( new EditTextViewManager() );
     }
 
     @Override
-    public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
-        return Arrays.<ViewManager>asList();
+    public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
+        return Collections.emptyList();
     }
 
-    @Override
-    public List<ViewManager> createViewManagers(
-            ReactApplicationContext reactContext) {
-        return Collections.<ViewManager>singletonList(
-                new EditTextViewManager()
-        );
-    }
 
 
 }
