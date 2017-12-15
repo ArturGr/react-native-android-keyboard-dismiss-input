@@ -80,6 +80,8 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
         thisEditText.setTextColor(Color.BLACK);
         thisEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
+        thisEditText.setTextIsSelectable(true);
+
 
         thisEditText.setVerticalScrollBarEnabled(true);
         thisEditText.setMovementMethod(ScrollingMovementMethod.getInstance());
@@ -94,6 +96,13 @@ public class EditTextViewManager extends SimpleViewManager<EditTextViewManager.M
             public void onFocusChange(View view, boolean b) {
                 if(view.getId() == thisEditText.getId() && b){
                     context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class) .emit("EditTextFocused", 1);
+                    thisEditText.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            InputMethodManager keyboard = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            keyboard.showSoftInput(thisEditText, 0);
+                        }
+                    },200);
                 }
             }
         });
