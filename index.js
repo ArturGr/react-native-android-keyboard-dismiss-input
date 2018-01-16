@@ -6,7 +6,8 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';*/
 var React = require('react');
-import { Component, PropTypes } from 'react';  
+import PropTypes from 'prop-types'
+import { Component } from 'react';  
 import { NativeModules,findNodeHandle, requireNativeComponent, View, Text, UIManager, DeviceEventEmitter } from 'react-native';
 
 /*var iface = {  
