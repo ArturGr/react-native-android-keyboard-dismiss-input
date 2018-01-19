@@ -107,7 +107,6 @@ public class CustomEditText extends EditText {
         mStagedInputType = getInputType();
         mKeyListener = new InternalKeyListener();
         mScrollWatcher = null;
-        this.onFocusChanged();
     }
 
     // After the text changes inside an EditText, TextView checks if a layout() has been requested.
