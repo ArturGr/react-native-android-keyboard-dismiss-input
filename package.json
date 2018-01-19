@@ -1,27 +1,53 @@
 {
-  "name": "react-native-android-keyboard-dismiss-input",
-  "version": "0.0.1",
-  "author": "Artur Gräfenstein",
-  "private": false,
-  "license": "Unlicense",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/MrToph/react-native-android-library-boilerplate.git"
+  "_from": "https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master",
+  "_id": "react-native-android-keyboard-dismiss-input@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-6PzMOlQCr695HDSAGLOmbXEvrnkPEcChrPhoD5dWXcJLR5z/rngH4O9cM367WDKRPP5N3Hm2d1OZOZ4fph3CoQ==",
+  "_location": "/react-native-android-keyboard-dismiss-input",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "react-native-android-keyboard-dismiss-input@https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master",
+    "name": "react-native-android-keyboard-dismiss-input",
+    "escapedName": "react-native-android-keyboard-dismiss-input",
+    "rawSpec": "https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master",
+    "saveSpec": "https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master",
+    "fetchSpec": "https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master",
+  "_spec": "react-native-android-keyboard-dismiss-input@https://github.com/ArturGr/react-native-android-keyboard-dismiss-input/tarball/master",
+  "_where": "/Users/artur/ReactWorkbench/clone2/superphone-mobile",
+  "author": {
+    "name": "Artur Gräfenstein"
   },
   "bugs": {
     "url": "https://github.com/MrToph/react-native-android-library-boilerplate/issues"
   },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "This project serves as a boilerplate to create custom React Native native modules that can later be installed through NPM and easily be used in production.",
   "homepage": "https://github.com/MrToph/react-native-android-library-boilerplate",
   "keywords": [
     "react-native",
     "android",
     "library"
   ],
+  "license": "Unlicense",
+  "name": "react-native-android-keyboard-dismiss-input",
+  "peerDependencies": {
+    "react-native": ">=0.38.0"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrToph/react-native-android-library-boilerplate.git"
+  },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
-  "peerDependencies": {
-    "react-native": ">=0.38.0"
-  }
+  "version": "0.0.1"
 }
