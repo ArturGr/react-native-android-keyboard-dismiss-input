@@ -365,6 +365,7 @@ const CustomTextInput = createReactClass({
      * to. Once it reaches this height, the TextInput becomes scrollable.
      */
     maxHeight: PropTypes.number,
+    minHeight: PropTypes.number,
     /**
      * Sets the number of lines for a `TextInput`. Use it with multiline set to
      * `true` to be able to fill the lines.
@@ -629,8 +630,7 @@ const CustomTextInput = createReactClass({
    * Returns `true` if the input is currently focused; `false` otherwise.
    */
   isFocused: function (): boolean {
-    return TextInputState.currentlyFocusedField() ===
-      ReactNative.findNodeHandle(this._inputRef);
+    return TextInputState.currentlyFocusedField() === ReactNative.findNodeHandle(this._inputRef);
   },
 
   contextTypes: {
@@ -856,9 +856,9 @@ _onFocus: function(event: Event) {
     this.props.onFocus(event);
   }
 
-  TextInputState.focusTextInput(ReactNative.findNodeHandle(this._inputRef));
+  //TextInputState.focusTextInput(ReactNative.findNodeHandle(this._inputRef));
   if (this.props.selectionState) {
-    //this.props.selectionState.focus();
+    this.props.selectionState.focus();
     //TextInputState.focusTextInput();
   } else {
   }
@@ -907,13 +907,32 @@ _onChange: function(event: Event) {
   this.forceUpdate();
 },
 
-_onContentSizeChange: function(event: Event) {
+_onContentSizeChange: function(event: Event) { 
   let contentHeight = event.nativeEvent.contentSize.height;
   if (this.props.autoGrow) {
+    let calculatedtContantheight = 0;
     if (this.props.maxHeight) {
-      contentHeight = Math.min(this.props.maxHeight, contentHeight);
+      contentHeight = Math.min(this.props.maxHeight, contentHeight); 
+      calculatedtContantheight = contentHeight == this.props.maxHeight? contentHeight : (contentHeight +4<= this.props.maxHeight ?contentHeight +4 : contentHeight);
+      /*if(contentHeight +4<= this.props.maxHeight){
+        console.info("contetntheight is kleiner  "); 
+      }*/
+    }else {
+      calculatedtContantheight = contentHeight +4;
+      
     }
-    this.setState({ layoutHeight: Math.max(this._layoutHeight, contentHeight) });
+    //console.info("Setting new state because content size has changewd!! = "+ contentHeight + "     layoutHei = " + this._layoutHeight); 
+    if(this.props.minHeight){
+      if(contentHeight < this.props.minHeight){
+        contentHeight = this.props.minHeight; 
+      }
+    }
+
+    
+    //console.info(calculatedtContantheight);
+    let setzteSize = contentHeight +7 < this._layoutHeight ? contentHeight : (this._layoutHeight > contentHeight? this._layoutHeight :  Math.max(this._layoutHeight,  Math.max(calculatedtContantheight,contentHeight) )   );
+    //console.info("settet Size = " + setzteSize);
+    this.setState({ layoutHeight: setzteSize });
   }
 
   this.props.onContentSizeChange && this.props.onContentSizeChange(event);
@@ -974,7 +993,7 @@ componentDidUpdate: function () {
 _onBlur: function(event: Event) {
   //this.blur();
 
-  TextInputState.blurTextInput(ReactNative.findNodeHandle(this._inputRef));
+  //TextInputState.blurTextInput(ReactNative.findNodeHandle(this._inputRef));
   if (this.props.onBlur) {
     this.props.onBlur(event);
   }
